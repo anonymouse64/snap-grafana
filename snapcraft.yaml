@@ -13,16 +13,16 @@ apps:
     daemon: simple
     stop-timeout: 1800s
 parts:
+  go:
+    source-tag: go1.9.3
   grafana-server:
+    after: [go]
     plugin: go
     source: https://github.com/grafana/grafana.git
     source-tag: v4.6.3
     go-importpath: github.com/grafana/grafana
-    build-packages: [golang-1.9, nodejs]
+    build-packages: [nodejs]
     build: |
-        # Make sure we use go 1.9
-        export PATH=/usr/lib/go-1.9/bin:$PATH
-        export GOPATH=$PWD/../go PATH=$PATH:$PWD/../go/bin GOROOT=/usr/lib/go-1.9
         cd ../go/src/github.com/grafana/grafana
         go run build.go setup
         go run build.go build
