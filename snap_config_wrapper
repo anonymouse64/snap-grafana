@@ -1,7 +1,9 @@
 #!/bin/sh
 
-test -e $SNAP_DATA/etc/grafana.ini || cp $SNAP/src/conf/defaults.ini $SNAP_DATA/etc/grafana.ini
-#test -e $SNAP_DATA/daemon_arguments || cp $SNAP/etc/prometheus/daemon_arguments.example $SNAP_DATA/daemon_arguments
+for i in lib/data lib/plugins etc;do
+  test -d $SNAP_DATA/$i || mkdir -p $SNAP_DATA/$i
+done
+test -e $SNAP_DATA/etc/grafana.ini || cp $SNAP/etc/defaults.ini $SNAP_DATA/etc/grafana.ini
 
 ulimit -n 4096
 #. $SNAP_DATA/daemon_arguments

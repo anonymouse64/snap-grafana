@@ -27,8 +27,9 @@ parts:
         go run build.go setup
         go run build.go build
     install: |
-        mkdir $SNAPCRAFT_PART_INSTALL/bin
+        mkdir $SNAPCRAFT_PART_INSTALL/bin $SNAPCRAFT_PART_INSTALL/etc
         cp -p $SNAPCRAFT_PART_INSTALL/../go/bin/grafana-server $SNAPCRAFT_PART_INSTALL/bin/
+        cp -p $SNAPCRAFT_PART_INSTALL/../src/conf/defaults.ini $SNAPCRAFT_PART_INSTALL/etc/
 
   snap-wrappers:
     plugin: dump
