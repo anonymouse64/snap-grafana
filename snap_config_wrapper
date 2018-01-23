@@ -1,0 +1,8 @@
+#!/bin/sh
+
+test -e $SNAP_DATA/etc/grafana.ini || cp $SNAP/src/conf/defaults.ini $SNAP_DATA/etc/grafana.ini
+#test -e $SNAP_DATA/daemon_arguments || cp $SNAP/etc/prometheus/daemon_arguments.example $SNAP_DATA/daemon_arguments
+
+ulimit -n 4096
+#. $SNAP_DATA/daemon_arguments
+$SNAP/bin/grafana-server --config=$SNAP_DATA/etc/grafana.ini --pidfile= cfg:default.paths.logs=$SNAP_DATA/log cfg:default.paths.data=$SNAP_DATA/lib/data cfg:default.paths.plugins=$SNAP_DATA/lib/plugins

@@ -1,0 +1,41 @@
+name: grafana-server
+version: 4.6.3
+grade: stable
+summary: feature rich metrics dashboard and graph editor
+description: |
+  Grafana is a feature rich metrics dashboard and graph editor for Graphite,
+  InfluxDB & OpenTSDB.
+confinement: strict
+apps:
+  grafana-server:
+    command: 'bin/grafana-server.wrapper'
+    plugs: [network-bind, network]
+    daemon: simple
+    stop-timeout: 1800s
+parts:
+  grafana-server:
+    plugin: go
+    source: https://github.com/grafana/grafana.git
+    source-tag: v4.6.3
+    go-importpath: github.com/grafana/grafana
+    build-packages: [golang-1.9, nodejs]
+    build: |
+        # Make sure we use go 1.9
+        export PATH=/usr/lib/go-1.9/bin:$PATH
+        export GOPATH=$PWD/../go PATH=$PATH:$PWD/../go/bin GOROOT=/usr/lib/go-1.9
+        cd ../go/src/github.com/grafana/grafana
+        go run build.go setup
+        go run build.go build
+    install: |
+        mkdir $SNAPCRAFT_PART_INSTALL/bin
+        cp -p $SNAPCRAFT_PART_INSTALL/../go/bin/grafana-server $SNAPCRAFT_PART_INSTALL/bin/
+
+  snap-wrappers:
+    plugin: dump
+    source: .
+    organize:
+      snap_config_wrapper: bin/grafana-server.wrapper
+    stage:
+      - bin/grafana-server.wrapper
+    prime:
+      - bin/grafana-server.wrapper
