@@ -30,6 +30,8 @@ parts:
         mkdir $SNAPCRAFT_PART_INSTALL/bin $SNAPCRAFT_PART_INSTALL/etc
         cp -p $SNAPCRAFT_PART_INSTALL/../go/bin/grafana-server $SNAPCRAFT_PART_INSTALL/bin/
         cp -p $SNAPCRAFT_PART_INSTALL/../src/conf/defaults.ini $SNAPCRAFT_PART_INSTALL/etc/
+    prime:
+      - bin/grafana-server
 
   snap-wrappers:
     plugin: dump
