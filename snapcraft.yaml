@@ -1,4 +1,4 @@
-name: grafana
+name: grafana-server
 version: 4.6.3
 summary: feature rich metrics dashboard and graph editor
 description: |
@@ -8,7 +8,7 @@ confinement: strict
 grade: stable
 
 apps:
-  grafana:
+  grafana-server:
     command: 'bin/grafana.wrapper'
     plugs: [network-bind, network]
     daemon: simple
@@ -21,7 +21,7 @@ parts:
       grafana.wrapper: bin/grafana.wrapper
   go:
     source-tag: go1.9.3
-  grafana:
+  grafana-server:
     after: [go]
     plugin: go
     source: https://github.com/grafana/grafana.git
@@ -37,7 +37,7 @@ parts:
         cp -p $SNAPCRAFT_PART_INSTALL/../go/bin/grafana-server $SNAPCRAFT_PART_INSTALL/bin/
         cp -p $SNAPCRAFT_PART_INSTALL/../src/conf/defaults.ini $SNAPCRAFT_PART_INSTALL/conf/
   grafana-ui:
-    after: [grafana]
+    after: [grafana-server]
     plugin: nodejs
     source-type: git
     source: https://github.com/grafana/grafana.git
