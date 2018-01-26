@@ -27,7 +27,6 @@ parts:
     source: https://github.com/grafana/grafana.git
     source-tag: v4.6.3
     go-importpath: github.com/grafana/grafana
-    build-packages: [nodejs]
     build: |
         cd ../go/src/github.com/grafana/grafana
         go run build.go setup
@@ -42,14 +41,9 @@ parts:
     source-type: git
     source: https://github.com/grafana/grafana.git
     source-tag: v4.6.3
-    node-engine: '6.11.4'
+    node-engine: 6.11.4
     node-package-manager: yarn
-    build: |
-        export PATH=$HOME/.npm-global/bin:$PATH
-        test -d ~/.npm-global || mkdir ~/.npm-global
-        npm config set prefix '~/.npm-global'
-        npm install -g yarn
-        yarn install --pure-lockfile
-        npm run build
+    node-packages: [grunt]
+    npm-run: [build]
     install: |
         cp -rf public $SNAPCRAFT_PART_INSTALL/public
