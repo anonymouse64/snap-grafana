@@ -76,11 +76,10 @@ parts:
     organize:
       grafana.wrapper: bin/grafana.wrapper
   go:
-    after: [phantomjs]
     source-tag: go1.9.3
     source-depth: 1
   grafana:
-    after: [go]
+    after: [go, phantomjs]
     plugin: go
     source: https://github.com/grafana/grafana.git
     source-tag: v5.0.4
