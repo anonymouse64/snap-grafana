@@ -67,7 +67,7 @@ parts:
         cp -p $SNAPCRAFT_PART_INSTALL/../go/bin/grafana-server $SNAPCRAFT_PART_INSTALL/bin/
         cp -p $SNAPCRAFT_PART_INSTALL/../src/conf/defaults.ini $SNAPCRAFT_PART_INSTALL/conf/
   grafana-ui:
-    after: [grafana]
+    after: [grafana, phantomjs]
     plugin: nodejs
     source-type: git
     source: https://github.com/grafana/grafana.git
