@@ -21,6 +21,7 @@ parts:
         make snap
     build-packages: [wget]
   phantomjs:
+    after: [clang]
     plugin: python
     source: https://github.com/ariya/phantomjs.git
     source-type: git
