@@ -18,8 +18,8 @@ parts:
     plugin: make
     source: clang
     build: |
+        set -e
         wget -c http://releases.llvm.org/3.8.0/clang+llvm-3.8.0-aarch64-linux-gnu.tar.xz
-        env | grep S
         tar -xf clang+llvm-3.8.0-aarch64-linux-gnu.tar.xz -C $SNAPCRAFT_STAGE
     build-packages: [wget]
   phantomjs:
@@ -33,6 +33,7 @@ parts:
         git submodule init
         git submodule update
     build: |
+        set -e
         # first recompile openssl
         cd src
         sed -i~orig -e 's/# deb-src/deb-src/' /etc/apt/sources.list
