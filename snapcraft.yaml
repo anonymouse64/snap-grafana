@@ -36,8 +36,10 @@ parts:
         set -e
         # first recompile openssl
         cd src
+        sudo sed -i~orig -e 's/# deb-src/deb-src/' /etc/apt/sources.list 
+        sudo apt-get update
         apt-get source openssl
-        cd openssl-1.0.1t
+        cd openssl-1.0.*
         ./Configure --prefix=/usr --openssldir=/etc/ssl --libdir=lib ${OPENSSL_FLAGS} linux-generic64
         make -j $SNAPCRAFT_PARALLEL_BUILD_COUNT depend && make -j $SNAPCRAFT_PARALLEL_BUILD_COUNT && make install_sw
         cd ..
