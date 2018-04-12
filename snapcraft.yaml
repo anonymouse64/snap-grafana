@@ -14,6 +14,12 @@ apps:
     daemon: simple
 
 parts:
+  clang:
+    plugin: make
+    source: clang
+    build: |
+        make snap
+    build-packages: [wget]
   phantomjs:
     plugin: python
     source: https://github.com/ariya/phantomjs.git
@@ -21,13 +27,26 @@ parts:
     source-depth: 1
     source-tag: 2.1.3
     prepare: |
-        env
-        echo $(pwd)
         git submodule init
         git submodule update
     build: |
-        env
-        python build.py -c
+        # first recompile openssl
+        cd src
+        apt-get source openssl
+        cd openssl-1.0.1t
+        ./Configure --prefix=/usr --openssldir=/etc/ssl --libdir=lib ${OPENSSL_FLAGS} linux-generic64
+        make -j $SNAPCRAFT_PARALLEL_BUILD_COUNT depend && make -j $SNAPCRAFT_PARALLEL_BUILD_COUNT && make install_sw
+        cd ..
+        # then recompile ICU in static mode
+        apt-get source icu
+        cd icu-52.1/source
+        ./configure --prefix=/usr --enable-static --disable-shared
+        make -j $SNAPCRAFT_PARALLEL_BUILD_COUNT && make install
+        cd ../..
+        # finally build phantomjs using clang instead of g++
+        export CC=$SNAPCRAFT_STAGE/clang+llvm-3.8.0-aarch64-linux-gnu/bin/clang
+        export CXX=$SNAPCRAFT_STAGE/clang+llvm-3.8.0-aarch64-linux-gnu/bin/clang++
+        python build.py  --confirm --release --qt-config="-no-pkg-config" --git-clean-qtbase --git-clean-qtwebkit
     stage-packages:
       - build-essential
       - g++
