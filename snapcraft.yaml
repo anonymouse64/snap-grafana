@@ -14,6 +14,35 @@ apps:
     daemon: simple
 
 parts:
+  phantomjs:
+    plugin: python
+    source: https://github.com/ariya/phantomjs.git
+    source-type: git
+    source-depth: 1
+    source-tag: 2.1.3
+    prepare: |
+        git submodule init
+        git submodule update
+    build: |
+        python build.py -c
+    stage-packages:
+        build-essential
+        g++
+        flex
+        bison
+        gperf
+        ruby
+        perl
+        libsqlite3-dev
+        libfontconfig1-dev
+        libicu-dev
+        libfreetype6
+        libssl-dev 
+        libpng-dev
+        libjpeg-dev
+        python
+        libx11-dev
+        libxext-dev
   snap-wrappers:
     plugin: dump
     source: bin
