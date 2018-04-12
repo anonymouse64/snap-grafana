@@ -1,5 +1,5 @@
-name: grafana
-version: 4.6.3
+name: grafana-ijohnson
+version: 5.0.4
 summary: feature rich metrics dashboard and graph editor
 description: |
   Grafana is a feature rich metrics dashboard and graph editor for Cloudwatch,
@@ -21,11 +21,13 @@ parts:
       grafana.wrapper: bin/grafana.wrapper
   go:
     source-tag: go1.9.3
+    source-depth: 1
   grafana:
     after: [go]
     plugin: go
     source: https://github.com/grafana/grafana.git
-    source-tag: v4.6.3
+    source-tag: v5.0.4
+    source-depth: 1
     go-importpath: github.com/grafana/grafana
     build: |
         cd ../go/src/github.com/grafana/grafana
@@ -40,7 +42,7 @@ parts:
     plugin: nodejs
     source-type: git
     source: https://github.com/grafana/grafana.git
-    source-tag: v4.6.3
+    source-tag: v5.0.4
     node-engine: 6.11.4
     node-package-manager: yarn
     node-packages: [grunt]
