@@ -35,6 +35,9 @@ parts:
     source-tag: v5.0.4
     source-depth: 1
     go-importpath: github.com/grafana/grafana
+    stage-packages:
+      - libfontconfig1
+      - libfreetype6
     build: |
         cd ../go/src/github.com/grafana/grafana
         go run build.go setup
