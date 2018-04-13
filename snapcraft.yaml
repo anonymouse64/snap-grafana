@@ -18,7 +18,8 @@ parts:
     plugin: dump
     source: phantomjs
     build: |
-      cp src/phantomjs/phantomjs $SNAPCRAFT_PART_INSTALL/bin/phantomjs
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      cp phantomjs $SNAPCRAFT_PART_INSTALL/bin/phantomjs
   snap-wrappers:
     plugin: dump
     source: bin
