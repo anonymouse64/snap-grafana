@@ -19,12 +19,15 @@ parts:
     build: |
       mkdir -p $SNAPCRAFT_PART_INSTALL/bin
       ARCH=$(uname -m)
+      echo $ARCH
       case $ARCH in
       aarch64)
+        echo "ARM64"
         wget -c https://github.com/fg2it/phantomjs-on-raspberry/releases/download/v2.1.1-jessie-stretch-arm64/phantomjs
         cp phantomjs $SNAPCRAFT_PART_INSTALL/bin/phantomjs
         ;;
       arm*)
+        echo "ARM"
         wget -c https://github.com/fg2it/phantomjs-on-raspberry/releases/download/v2.1.1-wheezy-jessie-armv6/phantomjs
         cp phantomjs $SNAPCRAFT_PART_INSTALL/bin/phantomjs
         ;;
