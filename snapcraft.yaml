@@ -46,11 +46,12 @@ parts:
     build-packages: [npm]
     override-build: |
       npm install --global yarn
-      # on armhf and arm64, remove phantomjs as required from the 
-      # package.json and yarn lock as it's not available
+      # on arm, s390x, and ppc systems remove phantomjs as required from the 
+      # package.json and yarn lock as it's not available from npm on those
+      # architectures
       ARCH=$(uname -m)
       case $ARCH in
-      aarch64|arm*)
+      aarch64|arm*|s390*|ppc*)
         yarn remove phantomjs-prebuilt --ignore-workspace-root-check;;
       esac
       yarn install --pure-lockfile
