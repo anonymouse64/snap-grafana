@@ -1,6 +1,7 @@
 name: grafana-ijohnson
-version: 5.0.4
+version: 6.1.2
 summary: feature rich metrics dashboard and graph editor
+base: core18
 description: |
   Grafana is a feature rich metrics dashboard and graph editor for Cloudwatch,
   Elasticsearch, Graphite, InfluxDB, OpenTSB, Prometheus, and Hosted Metrics.
@@ -14,60 +15,37 @@ apps:
     daemon: simple
 
 parts:
-  phantomjs:
-    plugin: nil
-    build: |
-      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
-      ARCH=$(uname -m)
-      echo $ARCH
-      case $ARCH in
-      aarch64)
-        echo "ARM64"
-        wget -c https://github.com/fg2it/phantomjs-on-raspberry/releases/download/v2.1.1-jessie-stretch-arm64/phantomjs
-        cp phantomjs /bin/phantomjs
-        ;;
-      arm*)
-        echo "ARM"
-        wget -c https://github.com/fg2it/phantomjs-on-raspberry/releases/download/v2.1.1-wheezy-jessie-armv6/phantomjs
-        cp phantomjs /bin/phantomjs
-        ;;
-      esac
-    build-packages: [wget]
   snap-wrappers:
     plugin: dump
     source: bin
     organize:
       grafana.wrapper: bin/grafana.wrapper
-  go:
-    source-tag: go1.9.3
-    source-depth: 1
   grafana:
-    after: [go, phantomjs]
     plugin: go
     source: https://github.com/grafana/grafana.git
-    source-tag: v5.0.4
+    source-tag: v6.1.2
     source-depth: 1
     go-importpath: github.com/grafana/grafana
+    build-packages: [build-essential, g++]
     stage-packages:
       - libfontconfig1
       - libfreetype6
-    build: |
+    override-build: |
         cd ../go/src/github.com/grafana/grafana
         go run build.go setup
         go run build.go build
-    install: |
         mkdir $SNAPCRAFT_PART_INSTALL/bin $SNAPCRAFT_PART_INSTALL/conf
         cp -p $SNAPCRAFT_PART_INSTALL/../go/bin/grafana-server $SNAPCRAFT_PART_INSTALL/bin/
         cp -p $SNAPCRAFT_PART_INSTALL/../src/conf/defaults.ini $SNAPCRAFT_PART_INSTALL/conf/
   grafana-ui:
-    after: [grafana, phantomjs]
-    plugin: nodejs
+    after: [grafana]
+    plugin: nil
     source-type: git
     source: https://github.com/grafana/grafana.git
-    source-tag: v5.0.4
-    node-engine: 6.11.4
-    node-package-manager: yarn
-    node-packages: [grunt]
-    npm-run: [build]
-    install: |
-        cp -rf public $SNAPCRAFT_PART_INSTALL/public
+    source-tag: v6.1.2
+    build-packages: [npm]
+    override-build: |
+      npm install --global yarn
+      yarn install --pure-lockfile
+      node_modules/.bin/grunt build
+      cp -rf public $SNAPCRAFT_PART_INSTALL/public
