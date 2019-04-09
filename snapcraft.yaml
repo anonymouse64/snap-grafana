@@ -46,7 +46,13 @@ parts:
     build-packages: [npm]
     override-build: |
       npm install --global yarn
-      yarn remove phantomjs-prebuilt --ignore-workspace-root-check
+      # on armhf and arm64, remove phantomjs as required from the 
+      # package.json and yarn lock as it's not available
+      ARCH=$(uname -m)
+      case $ARCH in
+      aarch64|arm*)
+        yarn remove phantomjs-prebuilt --ignore-workspace-root-check;;
+      esac
       yarn install --pure-lockfile
       node_modules/.bin/grunt build --force
       cp -rf public $SNAPCRAFT_PART_INSTALL/public
