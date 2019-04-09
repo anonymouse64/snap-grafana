@@ -46,7 +46,7 @@ parts:
     build-packages: [npm]
     override-build: |
       npm install --global yarn
-      yarn remove phantomjs-prebuilt
+      yarn remove phantomjs-prebuilt --ignore-workspace-root-check
       yarn install --pure-lockfile
       node_modules/.bin/grunt build --force
       cp -rf public $SNAPCRAFT_PART_INSTALL/public
